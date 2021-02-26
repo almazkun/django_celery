@@ -119,4 +119,4 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
-CELERY_BROKER_URL = 'redis://:some_password@localhost'
+CELERY_BROKER_URL = "redis://:some_password@localhost"
