@@ -24,8 +24,8 @@ app.autodiscover_tasks()
 def debug_task(self):
     print(f"Request: {self.request!r}")
 ```
-7. nano settings/__init__.py
-```
+7. nano settings/\_\_init\_\_.py
+```py
 # settings/__init__.py
 from .celery import app as celery_app
 
