@@ -36,5 +36,5 @@ __all__ = ("celery_app",)
 ```py
 CELERY_BROKER_URL = 'redis://localhost'
 ```
-9.`docker run --name redis -e ALLOW_EMPTY_PASSWORD=yes -p 6379:6379 -d redis:buster`
+9. `docker run --name redis -e ALLOW_EMPTY_PASSWORD=yes -p 6379:6379 -d redis:buster`
 10. `python manage.py runserver`
