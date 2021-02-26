@@ -16,6 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from delay.views import JustView
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", JustView.as_view(), name="home"),
 ]
