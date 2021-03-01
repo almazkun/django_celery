@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "delay",
 ]
 
 MIDDLEWARE = [
@@ -124,4 +125,6 @@ CELERY_RESULT_BACKEND = "redis://0.0.0.0:6379"
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
-CELERY_TIMEZONE = "Asia/Seoul"
+CELERY_TIMEZONE = "Europe/Oslo"
+
+ALLOWED_HOSTS += "*"
