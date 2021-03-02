@@ -44,17 +44,28 @@ __all__ = ("celery_app",)
 # append following:
 ...
 
-CELERY_BROKER_URL = "redis://0.0.0.0:6379"
-CELERY_RESULT_BACKEND = "redis://0.0.0.0:6379"
+CELERY_BROKER_URL = "redis://:redis_password@:6379"
+CELERY_RESULT_BACKEND = "redis://:redis_password@:6379"
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "Europe/Oslo"
 
+
 INSTALLED_APPS += "delay"
 ALLOWED_HOSTS += "*"
 ```
-9. `docker run --name redis -e ALLOW_EMPTY_PASSWORD=yes -p 6379:6379 -d redis:buster`
+9. 
+```
+docker run -d \
+  -h redis \
+  -v redis-data:/redis_data \
+  -p 6379:6379 \
+  --name redis \
+  --restart always \
+  redis:6 /bin/sh -c 'redis-server --requirepass redis_password'
+```
+
 10. `python manage.py runserver`
 
 ## 2. Django tasks, views, and urls
@@ -85,15 +96,12 @@ from delay.tasks import power
 @method_decorator(csrf_exempt, name="dispatch")
 class JustView(View):
     def post(self, request):
-        task = power.delay(
-            x=int(request.POST.get("x")), 
-            y=int(request.POST.get("y"))
-        )
+        task = power.delay(x=int(request.POST.get("x")), y=int(request.POST.get("y")))
 
         return JsonResponse({"task_id": task.id})
 
     def get(self, request):
-        r = redis.Redis()
+        r = redis.Redis(password="redis_password")
         data = {}
         for k in r.keys():
             if k.startswith(b"celery-"):
@@ -101,7 +109,6 @@ class JustView(View):
                 data[task.get("task_id")] = task.get("result")
 
         return JsonResponse(data)
-
 ```
 3. `nano settings/urls.py`
 ```py

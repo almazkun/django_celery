@@ -17,7 +17,7 @@ class JustView(View):
         return JsonResponse({"task_id": task.id})
 
     def get(self, request):
-        r = redis.Redis()
+        r = redis.Redis(password="redis_password")
         data = {}
         for k in r.keys():
             if k.startswith(b"celery-"):
