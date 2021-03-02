@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "delay",
 ]
 
 MIDDLEWARE = [
@@ -127,4 +126,6 @@ CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = "Europe/Oslo"
 
+
+INSTALLED_APPS += "delay"
 ALLOWED_HOSTS += "*"

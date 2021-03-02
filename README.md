@@ -8,8 +8,8 @@ and Radis Waiting...
 4. https://realpython.com/asynchronous-tasks-with-django-and-celery/
 
 ## 1. Setup
-1. `mkdir dj_celery`
-2. `cd dj_celery`
+1. `mkdir ~/dj_celery`
+2. `cd ~/dj_celery`
 3. `pipenv install django "celery[redis]"`
 4. `django-admin startproject settings .`
 5. `python3 manage.py startapp delay`
@@ -120,3 +120,25 @@ urlpatterns += path("", JustView.as_view(), name="home")
 5. `celery -A settings worker -l info`
 6. `curl -d "x=10&y=64" -X POST http://localhost:8000`
 7. `curl http://localhost:8000`
+
+## 3. Celery in the Background
+1. `sudo apt-get install supervisor`
+2. `mkdir /var/log/celery/`
+3. `touch /var/log/celery/delay.log`
+4. `nano /etc/supervisor/conf.d/celery.conf`
+```conf
+; /etc/supervisor/conf.d/celery.conf
+[program:celery]
+command=pypenv run celery -A settings worker -l info
+directory=~/dj_celery
+numprocs=1
+stdout_logfile=/var/log/celery/delay.log
+stderr_logfile=/var/log/celery/delay.log
+autostart=true
+autorestart=true
+startsecs=10
+stopwaitsecs = 600
+killasgroup=true
+```
+5. `sudo supervisorctl reread`
+6. `sudo supervisorctl update`
