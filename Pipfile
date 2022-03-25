@@ -4,9 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-celery = {extras = ["redis"], version = "*"}
-django = "*"
-redis = "*"
+amqp = "~=2.6" 
+celery = "~=4.4"
+django = "~=4.0"
+djangorestframework = "~=3.13"
+
 
 [dev-packages]
 

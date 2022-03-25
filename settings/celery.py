@@ -1,19 +1,25 @@
-from __future__ import absolute_import
-
-import os
+import datetime
 
 from celery import Celery
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.settings")
-
-
-app = Celery("settings")
-
-app.config_from_object("django.conf:settings", namespace="CELERY")
-
-app.autodiscover_tasks()
+from django.conf import settings
 
 
-@app.task(bind=True)
-def debug_task(self):
-    print(f"Request: {self.request!r}")
+app = Celery(
+    "tasks",
+    broker="amqp://remote_guest:remote_guest@rabbitmq:5672/",
+    backend="amqp",
+)
+app.conf.update(
+    result_expires=datetime.timedelta(days=5),
+    result_persistent=True,
+    task_serializer="json",
+    accept_content=["json"],
+    result_serializer="json",
+    worker_pool_restarts=True,
+    # worker_prefetch_multiplier=1, # NOTE: this breaks auto-scaling
+    task_acks_late=False,
+    task_track_started=True,
+    worker_max_tasks_per_child=1,
+    task_reject_on_worker_lost=False,
+    broker_pool_limit=None,
+)

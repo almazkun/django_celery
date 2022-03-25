@@ -2,10 +2,8 @@
 and Radis Waiting...
 
 ## Docs
-1. https://docs.celeryproject.org/en/stable/getting-started/first-steps-with-celery.html
-2. https://docs.celeryproject.org/en/stable/django/first-steps-with-django.html#using-celery-with-django
-3. https://testdriven.io/blog/django-and-celery/
-4. https://realpython.com/asynchronous-tasks-with-django-and-celery/
+
+1. https://testdriven.io/blog/django-and-celery/
 
 ## 1. Setup
 1. `mkdir ~/dj_celery`
