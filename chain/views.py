@@ -13,9 +13,7 @@ def run_task(request):
         if request.POST:
             a = int(request.POST.get("a"))
             b = int(request.POST.get("b"))
-
-            task = tasks.add.delay(a, b)
-
+            task = tasks.add.apply_async((a, b), link=tasks.power.s())
             return JsonResponse({"task_id": task.id}, status=202)
     except Exception as e:
         traceback.print_exc()
