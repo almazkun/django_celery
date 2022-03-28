@@ -124,3 +124,5 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Mlcore Celery Settings
+CELERY_BROKER_URL = "amqp://remote_guest:remote_guest@rabbitmq:5672/"
+CELERY_RESULT_BACKEND = "amqp"

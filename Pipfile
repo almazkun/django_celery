@@ -9,8 +9,10 @@ celery = "~=4.4"
 django = "~=4.0"
 djangorestframework = "~=3.13"
 
-
 [dev-packages]
+black = "*"
+isort = "*"
+autoflake = "*"
 
 [requires]
 python_version = "3.8"
