@@ -9,10 +9,10 @@ services:
 
     flower_redis:
         image: mher/flower
-        environment: 
+        environment:
             CELERY_BROKER_URL: ${REDIS_CELERY_BROKER_URL}
             FLOWER_PORT: 5555
-        ports: 
+        ports:
             - 5555:5555
 
     celery_redis:
@@ -31,17 +31,17 @@ services:
     rabbitmq:
         image: rabbitmq:3.5.7
         ports:
-          - 5672:5672
+            - 5672:5672
         environment:
             RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
             RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
 
     flower_rabbitmq:
         image: mher/flower
-        environment: 
+        environment:
             CELERY_BROKER_URL: ${RABBITMQ_CELERY_BROKER_URL}
             FLOWER_PORT: 5556
-        ports: 
+        ports:
             - 5556:5556
 
     celery_rabbitmq:
@@ -67,8 +67,7 @@ services:
             RABBITMQ_CELERY_APP_NAME: ${RABBITMQ_CELERY_APP_NAME}
             RABBITMQ_CELERY_BROKER_URL: ${RABBITMQ_CELERY_BROKER_URL}
             RABBITMQ_CELERY_RESULT_BACKEND: ${RABBITMQ_CELERY_RESULT_BACKEND}
-        ports: 
-          - 80:8000
+        ports:
+            - 80:8000
         volumes:
             - ./:/usr/src/code
-
