@@ -1,32 +1,37 @@
 version: "3"
 
 services:
-    rabbitmq:
-        image: rabbitmq:3.5.7
-        restart: on-failure:5 
-        ports:
-          - 5672:5672
-        environment:
-            RABBITMQ_DEFAULT_USER: remote_guest
-            RABBITMQ_DEFAULT_PASS: remote_guest
 
-    flower:
+    redis:
+        image: redis:alpine
+        ports:
+            - 6379:6379
+
+    flower_redis:
         image: mher/flower
         environment: 
-            - CELERY_BROKER_URL=amqp://remote_guest:remote_guest@rabbitmq:5672/
-            - FLOWER_PORT=5555
+            CELERY_BROKER_URL: ${REDIS_CELERY_APP_NAME}
+            FLOWER_PORT: 5555
         ports: 
             - 5555:5555
-    celery:
+            
+    celery_redis:
         build: ./
-        command: celery -A settings worker -l info
+        command: celery -A settings.celery_redis worker -l info
+        environment:
+            REDIS_CELERY_APP_NAME: ${REDIS_CELERY_APP_NAME}
+            REDIS_CELERY_BROKER_URL: ${REDIS_CELERY_BROKER_URL}
+            REDIS_CELERY_RESULT_BACKEND: ${REDIS_CELERY_RESULT_BACKEND}
         volumes:
-            - ./:/usr/src/code        
+            - ./:/usr/src/code
 
     web:
         build: ./
-        restart: on-failure:5
         command: python3 manage.py runserver 0.0.0.0:8000 --verbosity 2
+        environment:
+            REDIS_CELERY_APP_NAME: ${REDIS_CELERY_APP_NAME}
+            REDIS_CELERY_BROKER_URL: ${REDIS_CELERY_BROKER_URL}
+            REDIS_CELERY_RESULT_BACKEND: ${REDIS_CELERY_RESULT_BACKEND}
         ports: 
           - 80:8000
         volumes:

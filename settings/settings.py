@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -37,7 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "chain",
+    "chaining",
 ]
 
 MIDDLEWARE = [
@@ -123,11 +124,6 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Mlcore Celery Settings
-CELERY_BROKER_URL = "amqp://remote_guest:remote_guest@rabbitmq:5672/"
-CELERY_RESULT_BACKEND = "amqp"
-
-
 # https://docs.djangoproject.com/en/4.0/topics/logging/
 LOGGING = {
     "version": 1,
@@ -150,3 +146,11 @@ LOGGING = {
         "level": "DEBUG",
     },
 }
+
+REDIS_CELERY_APP_NAME = os.environ.get("REDIS_CELERY_APP_NAME", None)
+REDIS_CELERY_BROKER_URL = os.environ.get("REDIS_CELERY_BROKER_URL", None)
+REDIS_CELERY_RESULT_BACKEND = os.environ.get("REDIS_CELERY_RESULT_BACKEND", None)
+
+CELERY_ACCEPT_CONTENT = ["application/json"]
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TASK_SERIALIZER = "json"

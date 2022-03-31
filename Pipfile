@@ -8,6 +8,7 @@ amqp = "~=2.6"
 celery = "~=4.4"
 django = "~=4.0"
 djangorestframework = "~=3.13"
+redis = "*"
 
 [dev-packages]
 black = "*"

@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from chain.views import run_task
+from chaining.views import run_task
 
 urlpatterns = [
     path("admin/", admin.site.urls),

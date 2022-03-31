@@ -1,12 +1,10 @@
 up:
-	docker-compose up --build -d
-	docker-compose up celery web
+	docker-compose up --build
 
 down:
 	docker-compose down -v
 
 renew: down up
-
 
 lint:
 	pipenv run isort --recursive --force-single-line-imports --line-width 999 .

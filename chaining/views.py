@@ -1,9 +1,10 @@
 import traceback
 
+from celery import chain
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from chain import tasks
+import settings.celery_redis
 
 
 # Create your views here.
@@ -13,8 +14,11 @@ def run_task(request):
         if request.POST:
             a = int(request.POST.get("a"))
             b = int(request.POST.get("b"))
-            task = tasks.add.apply_async((a, b), link=tasks.power.s())
-            return JsonResponse({"task_id": task.id}, status=202)
+            mt_task = chain(
+                settings.celery_redis.add.s(a, b),
+                settings.celery_redis.power.s(),
+            ).apply_async()
+            return JsonResponse({"task_id": mt_task.id})
     except Exception as e:
         traceback.print_exc()
         return JsonResponse({"error": str(e)}, status=400)
