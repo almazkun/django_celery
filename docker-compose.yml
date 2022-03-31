@@ -10,11 +10,11 @@ services:
     flower_redis:
         image: mher/flower
         environment: 
-            CELERY_BROKER_URL: ${REDIS_CELERY_APP_NAME}
+            CELERY_BROKER_URL: ${REDIS_CELERY_BROKER_URL}
             FLOWER_PORT: 5555
         ports: 
             - 5555:5555
-            
+
     celery_redis:
         build: ./
         command: celery -A settings.celery_redis worker -l info
@@ -22,6 +22,38 @@ services:
             REDIS_CELERY_APP_NAME: ${REDIS_CELERY_APP_NAME}
             REDIS_CELERY_BROKER_URL: ${REDIS_CELERY_BROKER_URL}
             REDIS_CELERY_RESULT_BACKEND: ${REDIS_CELERY_RESULT_BACKEND}
+            RABBITMQ_CELERY_APP_NAME: ${RABBITMQ_CELERY_APP_NAME}
+            RABBITMQ_CELERY_BROKER_URL: ${RABBITMQ_CELERY_BROKER_URL}
+            RABBITMQ_CELERY_RESULT_BACKEND: ${RABBITMQ_CELERY_RESULT_BACKEND}
+        volumes:
+            - ./:/usr/src/code
+
+    rabbitmq:
+        image: rabbitmq:3.5.7
+        ports:
+          - 5672:5672
+        environment:
+            RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+            RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+
+    flower_rabbitmq:
+        image: mher/flower
+        environment: 
+            CELERY_BROKER_URL: ${RABBITMQ_CELERY_BROKER_URL}
+            FLOWER_PORT: 5556
+        ports: 
+            - 5556:5556
+
+    celery_rabbitmq:
+        build: ./
+        command: celery -A settings.celery_rabbitmq worker -l info
+        environment:
+            REDIS_CELERY_APP_NAME: ${REDIS_CELERY_APP_NAME}
+            REDIS_CELERY_BROKER_URL: ${REDIS_CELERY_BROKER_URL}
+            REDIS_CELERY_RESULT_BACKEND: ${REDIS_CELERY_RESULT_BACKEND}
+            RABBITMQ_CELERY_APP_NAME: ${RABBITMQ_CELERY_APP_NAME}
+            RABBITMQ_CELERY_BROKER_URL: ${RABBITMQ_CELERY_BROKER_URL}
+            RABBITMQ_CELERY_RESULT_BACKEND: ${RABBITMQ_CELERY_RESULT_BACKEND}
         volumes:
             - ./:/usr/src/code
 
@@ -32,6 +64,9 @@ services:
             REDIS_CELERY_APP_NAME: ${REDIS_CELERY_APP_NAME}
             REDIS_CELERY_BROKER_URL: ${REDIS_CELERY_BROKER_URL}
             REDIS_CELERY_RESULT_BACKEND: ${REDIS_CELERY_RESULT_BACKEND}
+            RABBITMQ_CELERY_APP_NAME: ${RABBITMQ_CELERY_APP_NAME}
+            RABBITMQ_CELERY_BROKER_URL: ${RABBITMQ_CELERY_BROKER_URL}
+            RABBITMQ_CELERY_RESULT_BACKEND: ${RABBITMQ_CELERY_RESULT_BACKEND}
         ports: 
           - 80:8000
         volumes:

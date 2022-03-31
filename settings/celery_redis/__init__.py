@@ -25,4 +25,4 @@ def add(x: int, y: int) -> int:
 
 @app_redis.task
 def power(c: int) -> dict:
-    return {"power": c ** 2}
+    return {"power": c**2}

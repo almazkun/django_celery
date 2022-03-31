@@ -20,5 +20,4 @@ class Calculation(models.Model):
 
 
 class CalculationResult(models.Model):
-    calculation = models.ForeignKey(Calculation, on_delete=models.CASCADE)
     result = models.FloatField()
